@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Nazar](https://up.htmlacademy.ru/javascript/18/user/1041805).
-* Наставник: `Андрей Столпнер`.
+* Наставник: [Андрей Столпнер](https://htmlacademy.ru/profile/stolpnera).
 
 ---
 
