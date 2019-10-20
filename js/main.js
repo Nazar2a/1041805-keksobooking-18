@@ -32,7 +32,7 @@ var creationArrays = function (N) {
   for (var i = 0; i < N; i++) {
     ads.unshift({
       author: {
-      avatar: 'img/avatars/user0' + (i + 1) + '.png'
+        avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
 
       offer: {
