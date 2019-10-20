@@ -1,3 +1,5 @@
+'use strict';
+
 var TITLES = ['Квартира 1', 'Квартира 2', 'Квартира 3', 'Квартира 4', 'Квартира 5', 'Квартира 6', 'Квартира 7', 'Квартира 8'];
 
 var ADSRESS = '600, 350';
@@ -29,31 +31,31 @@ var randomArrayElement = function (items) {
 var creationArrays = function (N) {
   for (var i = 0; i < N; i++) {
     ads.unshift({
-    author: {
-    avatar: 'img/avatars/user0' + (i + 1) + '.png'
-    },
+      author: {
+      avatar: 'img/avatars/user0' + (i + 1) + '.png'
+      },
 
-    offer: {
-      title: randomArrayElement(TITLES),
-      address: ADSRESS,
-      price: random(400, 2000),
-      type: randomArrayElement(TYPES),
-      rooms: random(1, 4),
-      guests: random(1, 10),
-      checkin: randomArrayElement(CHECKINS),
-      checkout: randomArrayElement(CHECKOUTS),
-      features: randomArrayElement(FEATURES),
-      description: randomArrayElement(DESCRIPTION),
-      photos: randomArrayElement(PHOTOS)
-    },
+      offer: {
+        title: randomArrayElement(TITLES),
+        address: ADSRESS,
+        price: random(400, 2000),
+        type: randomArrayElement(TYPES),
+        rooms: random(1, 4),
+        guests: random(1, 10),
+        checkin: randomArrayElement(CHECKINS),
+        checkout: randomArrayElement(CHECKOUTS),
+        features: randomArrayElement(FEATURES),
+        description: randomArrayElement(DESCRIPTION),
+        photos: randomArrayElement(PHOTOS)
+      },
 
-    location: {
-      x: random(130, 630),
-      y: random(130, 630)
-    }
-      });
+      location: {
+        x: random(130, 630),
+        y: random(130, 630)
+      }
+    });
   }
-}
+};
 
 creationArrays(ADS_QUANTILY);
 
