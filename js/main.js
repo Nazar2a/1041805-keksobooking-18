@@ -55,8 +55,8 @@ var takeRandomObjects = function (arr) {
     arr[i] = arr[j];
     arr[j] = temp;
   }
-  for (var i = 0; i <= Math.floor(Math.random() * arr.length); i++) {
-    objects.push(arr[i]);
+  for (var j = 0; j <= Math.floor(Math.random() * arr.length); j++) {
+    objects.push(arr[j]);
   }
   return objects;
 };
@@ -78,9 +78,9 @@ var creationArrays = function (amountElements) {
         guests: randomNumber(1, 10),
         checkin: randomArrayElement(CHECKINS),
         checkout: randomArrayElement(CHECKOUTS),
-        features: severalRandomObjects(FEATURES),
+        features: takeRandomObjects(FEATURES),
         description: randomArrayElement(DESCRIPTION),
-        photos: severalRandomObjects(PHOTOS)
+        photos: takeRandomObjects(PHOTOS)
       },
 
       location: {
@@ -94,7 +94,7 @@ var creationArrays = function (amountElements) {
 };
 
 var ads = creationArrays(ADS_QUANTILY);
-
+console.log(takeRandomObjects(FEATURES));
 var removeClass = function (selector, classSelector) {
   document.querySelector(selector).classList.remove(classSelector);
   };
