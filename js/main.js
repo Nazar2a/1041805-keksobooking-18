@@ -55,8 +55,8 @@ var takeRandomObjects = function (arr) {
     arr[i] = arr[j];
     arr[j] = temp;
   }
-  for (var j = 0; j <= Math.floor(Math.random() * arr.length); j++) {
-    objects.push(arr[j]);
+  for (var g = 0; g <= Math.floor(Math.random() * arr.length); g++) {
+    objects.push(arr[g]);
   }
   return objects;
 };
@@ -94,10 +94,10 @@ var creationArrays = function (amountElements) {
 };
 
 var ads = creationArrays(ADS_QUANTILY);
-console.log(takeRandomObjects(FEATURES));
+
 var removeClass = function (selector, classSelector) {
   document.querySelector(selector).classList.remove(classSelector);
-  };
+};
 
 removeClass('.map', 'map--faded');
 
@@ -107,7 +107,7 @@ var similarAddTemplate = document.querySelector('#pin')
 
 var renderMark = function (parameterMark) {
   var markElement = similarAddTemplate.cloneNode(true);
-markElement.style = 'left: ' + (parameterMark.location.x + (MARKWIDTH / 2)) + 'px; top: ' + (parameterMark.location.y + MARKHEIGHT) + 'px;';
+  markElement.style = 'left: ' + (parameterMark.location.x + (MARKWIDTH / 2)) + 'px; top: ' + (parameterMark.location.y + MARKHEIGHT) + 'px;';
   markElement.querySelector('img').src = parameterMark.author.avatar;
   markElement.querySelector('img').alt = parameterMark.offer.description;
 
