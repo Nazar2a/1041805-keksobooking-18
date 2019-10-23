@@ -1,26 +1,43 @@
 'use strict';
 
-var TITLES = ['Квартира 1', 'Квартира 2', 'Квартира 3', 'Квартира 4', 'Квартира 5', 'Квартира 6', 'Квартира 7', 'Квартира 8'];
-
+var TITLES = [
+  'Квартира 1',
+  'Квартира 2',
+  'Квартира 3',
+  'Квартира 4',
+  'Квартира 5',
+  'Квартира 6',
+  'Квартира 7',
+  'Квартира 8'
+];
 var ADSRESS = '600, 350';
-
-var TYPES = ['palace', 'flat', 'house', 'bungalo'];
-
+var TYPES = [
+  'palace',
+  'flat',
+  'house',
+  'bungalo'
+];
 var CHECKINS = ['12:00', '13:00', '14:00'];
-
 var CHECKOUTS = CHECKINS;
-
-var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-
+var FEATURES = [
+  'wifi',
+  'dishwasher',
+  'parking',
+  'washer',
+  'elevator',
+  'conditioner'
+];
 var DESCRIPTION = ['описание дома', 'описание второго дома'];
-
-var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
+var PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
 var ADS_QUANTILY = 8;
+var MARKWIDTH = 50;
+var MARKHEIGHT = 70;
 
-var ads = [];
-
-var random = function (min, max) {
+var randomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
@@ -28,9 +45,26 @@ var randomArrayElement = function (items) {
   return items[Math.floor(Math.random() * items.length)];
 };
 
-var creationArrays = function (N) {
-  for (var i = 0; i < N; i++) {
-    ads.unshift({
+var similarListElement = document.querySelector('.map__pins');
+
+var takeRandomObjects = function (arr) {
+  var objects = [];
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  for (var i = 0; i <= Math.floor(Math.random() * arr.length); i++) {
+    objects.push(arr[i]);
+  }
+  return objects;
+};
+
+var creationArrays = function (amountElements) {
+  var object = [];
+  for (var i = 0; i < amountElements; i++) {
+    object.push({
       author: {
         avatar: 'img/avatars/user0' + (i + 1) + '.png'
       },
@@ -38,51 +72,54 @@ var creationArrays = function (N) {
       offer: {
         title: randomArrayElement(TITLES),
         address: ADSRESS,
-        price: random(400, 2000),
+        price: randomNumber(400, 2000),
         type: randomArrayElement(TYPES),
-        rooms: random(1, 4),
-        guests: random(1, 10),
+        rooms: randomNumber(1, 4),
+        guests: randomNumber(1, 10),
         checkin: randomArrayElement(CHECKINS),
         checkout: randomArrayElement(CHECKOUTS),
-        features: randomArrayElement(FEATURES),
+        features: severalRandomObjects(FEATURES),
         description: randomArrayElement(DESCRIPTION),
-        photos: randomArrayElement(PHOTOS)
+        photos: severalRandomObjects(PHOTOS)
       },
 
       location: {
-        x: random(130, 630),
-        y: random(130, 630)
+        x: randomNumber(similarListElement.offsetLeft, similarListElement.offsetWidth),
+        y: randomNumber(130, 630)
       }
     });
   }
+
+  return object;
 };
 
-creationArrays(ADS_QUANTILY);
+var ads = creationArrays(ADS_QUANTILY);
 
-document.querySelector('.map').classList.remove('map--faded');
+var removeClass = function (selector, classSelector) {
+  document.querySelector(selector).classList.remove(classSelector);
+  };
 
-var similarListElement = document.querySelector('.map__pins');
+removeClass('.map', 'map--faded');
 
 var similarAddTemplate = document.querySelector('#pin')
   .content
   .querySelector('.map__pin');
 
+var renderMark = function (parameterMark) {
+  var markElement = similarAddTemplate.cloneNode(true);
+markElement.style = 'left: ' + (parameterMark.location.x + (MARKWIDTH / 2)) + 'px; top: ' + (parameterMark.location.y + MARKHEIGHT) + 'px;';
+  markElement.querySelector('img').src = parameterMark.author.avatar;
+  markElement.querySelector('img').alt = parameterMark.offer.description;
 
-var render = function (parameter) {
-  var Element = similarAddTemplate.cloneNode(true);
-  Element.style = 'left: ' + parameter.location.x + 'px; top: ' + parameter.location.y + 'px;';
-  Element.querySelector('img').src = parameter.author.avatar;
-  Element.querySelector('img').alt = parameter.offer.description;
-
-  return Element;
+  return markElement;
 };
 
-var drawingElement = function (array) {
+var drawingElements = function (data) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < array.length; i++) {
-    fragment.appendChild(render(array[i]));
+  for (var i = 0; i < data.length; i++) {
+    fragment.appendChild(renderMark(data[i]));
   }
   similarListElement.appendChild(fragment);
 };
 
-drawingElement(ads);
+drawingElements(ads);
