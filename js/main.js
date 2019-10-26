@@ -48,7 +48,7 @@ var randomArrayElement = function (items) {
 var similarListElement = document.querySelector('.map__pins');
 
 var creatingRandomLengthArray = function (arr) {
-  var  array = [];
+  var array = [];
   for (var i = arr.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var temp = arr[i];
@@ -56,9 +56,9 @@ var creatingRandomLengthArray = function (arr) {
     arr[j] = temp;
   }
   for (var g = 0; g <= Math.floor(Math.random() * arr.length); g++) {
-     array.push(arr[g]);
+    array.push(arr[g]);
   }
-  return  array;
+  return array;
 };
 
 var creationArrays = function (amountElements) {
