@@ -47,8 +47,8 @@ var randomArrayElement = function (items) {
 
 var similarListElement = document.querySelector('.map__pins');
 
-var takeRandomObjects = function (arr) {
-  var objects = [];
+var creatingRandomLengthArray = function (arr) {
+  var  array = [];
   for (var i = arr.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var temp = arr[i];
@@ -56,9 +56,9 @@ var takeRandomObjects = function (arr) {
     arr[j] = temp;
   }
   for (var g = 0; g <= Math.floor(Math.random() * arr.length); g++) {
-    objects.push(arr[g]);
+     array.push(arr[g]);
   }
-  return objects;
+  return  array;
 };
 
 var creationArrays = function (amountElements) {
@@ -78,9 +78,9 @@ var creationArrays = function (amountElements) {
         guests: randomNumber(1, 10),
         checkin: randomArrayElement(CHECKINS),
         checkout: randomArrayElement(CHECKOUTS),
-        features: takeRandomObjects(FEATURES),
+        features: creatingRandomLengthArray(FEATURES),
         description: randomArrayElement(DESCRIPTION),
-        photos: takeRandomObjects(PHOTOS)
+        photos: creatingRandomLengthArray(PHOTOS)
       },
 
       location: {
