@@ -123,3 +123,74 @@ var drawingElements = function (data) {
 };
 
 drawingElements(ads);
+
+//////////////////////////////////////////////////////////
+
+var mapPinMain = document.querySelector('.map__pin--main');
+var adForm = document.querySelector('.ad-form');
+var mapFilters = document.querySelector('.map__filters');
+
+var deleteAttributes = function (block, selector, atribute) {
+  var elementsOfBlock = block.querySelectorAll(selector);
+
+  for (var i = 0; i < elementsOfBlock.length; i++) {
+    elementsOfBlock[i].removeAttribute(atribute);
+  }
+};
+
+var removeClass = function (selector, classSelector) {
+  document.querySelector(selector).classList.remove(classSelector);
+};
+
+
+var PIN_MAIN_RADIUS = 65;
+var PIN_MAIN_HEIGHT_INACTIVE = 65;
+var PIN_MAIN_HEIGHT_ACTIVE = 87;
+
+var tagCoords = function (tag, tagStatus) {
+  var box = tag.getBoundingClientRect();
+
+  return {
+    top: (box.top + pageYOffset) + tagStatus,
+    left: (box.left + pageXOffset) + (Math.floor(PIN_MAIN_RADIUS / 2))
+  };
+};
+
+var recordCoordsInInput = function (tag, tagStatus, input) {
+  var mapPinMainCoords = tagCoords(tag, tagStatus);
+  document.getElementById(input).value=mapPinMainCoords.top + ', ' + mapPinMainCoords.left;
+};
+
+recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_INACTIVE, 'address');
+
+mapPinMain.addEventListener('mousedown', function() {
+  removeClass('.map', 'map--faded');
+  removeClass('.ad-form', 'ad-form--disabled');
+  deleteAttributes(adForm, 'fieldset', 'disabled');
+  deleteAttributes(mapFilters, 'select', 'disabled');
+  deleteAttributes(mapFilters, 'fieldset', 'disabled');
+  recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_ACTIVE, 'address');
+});
+
+mapPinMain.addEventListener('keydown', function(evt) {
+  if (evt.keyCode === 13) {
+    removeClass('.map', 'map--faded');
+    removeClass('.ad-form', 'ad-form--disabled');
+    deleteAttributes(adForm, 'fieldset', 'disabled');
+    deleteAttributes(mapFilters, 'select', 'disabled');
+    deleteAttributes(mapFilters, 'fieldset', 'disabled');
+    recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_ACTIVE, 'address');
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
