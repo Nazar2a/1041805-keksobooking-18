@@ -192,35 +192,33 @@ mapPinMain.addEventListener('keydown', function (evt) {
 var roomNumbers = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
 
-console.log(capacity);
-
-
 capacity.addEventListener('focus', function () {
   var roomNumber = roomNumbers.value;
+  capacity.options[0].removeAttribute('disabled', 'disabled');
+  capacity.options[1].removeAttribute('disabled', 'disabled');
+  capacity.options[2].removeAttribute('disabled', 'disabled');
+  capacity.options[3].removeAttribute('disabled', 'disabled');
+
   if (roomNumber == 1) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[1].setAttribute('disabled', 'disabled');
     capacity.options[3].setAttribute('disabled', 'disabled');
 
-  } else {
-    capacity.options[0].removeAttribute('disabled', 'disabled');
-    capacity.options[1].removeAttribute('disabled', 'disabled');
-    capacity.options[3].removeAttribute('disabled', 'disabled');
-  }
+  };
+  if (roomNumber == 2) {
+    capacity.options[0].setAttribute('disabled', 'disabled');
+    capacity.options[3].setAttribute('disabled', 'disabled');
+  };
+  if (roomNumber == 3) {
+    capacity.options[3].setAttribute('disabled', 'disabled');
+  };
+  if (roomNumber == 100) {
+    capacity.options[0].setAttribute('disabled', 'disabled');
+    capacity.options[1].setAttribute('disabled', 'disabled');
+    capacity.options[2].setAttribute('disabled', 'disabled');
+  };
 });
 
-/* var setAttributes = function (block, selector, atribute) {
-  var elementsOfBlock = block.querySelectorAll(selector);
 
-  for (var i = 0; i < elementsOfBlock.length; i++) {
-    elementsOfBlock[i].setAttribute(atribute);
-  }
-};
- */
-
-/* var eee = roomNumbers.querySelectorAll('option');
-console.log(eee); */
-var eee = roomNumbers.options[2];
-console.log(roomNumbers.options[0]);
 
 
