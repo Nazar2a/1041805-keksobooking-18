@@ -192,7 +192,7 @@ mapPinMain.addEventListener('keydown', function (evt) {
 */
 
 var roomNumbers = document.querySelector('#room_number');
-var capacities = document.querySelector('#capacity');
+var capacity = document.querySelector('#capacity');
 
 capacity.addEventListener('focus', function () {
   for (var i = 0; i < capacity.options.length; i++) {
