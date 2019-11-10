@@ -124,31 +124,21 @@ var drawingElements = function (data) {
 
 drawingElements(ads);
 
-//////////////////////////////////////////////////////////
+/*
+  Задание 4. Обработка событий
+*/
 
 var mapPinMain = document.querySelector('.map__pin--main');
 var adForm = document.querySelector('.ad-form');
 var mapFilters = document.querySelector('.map__filters');
-
-var deleteAttributes = function (block, selector, atribute) {
-  var elementsOfBlock = block.querySelectorAll(selector);
-
-  for (var i = 0; i < elementsOfBlock.length; i++) {
-    elementsOfBlock[i].removeAttribute(atribute);
-  }
-};
-
-/* var setAttributes = function (block, selector, atribute) {
-  var elementsOfBlock = block.querySelectorAll(selector);
-
-  for (var i = 0; i < elementsOfBlock.length; i++) {
-    elementsOfBlock[i].setAttribute(atribute);
-  }
-}; */
-
 var PIN_MAIN_RADIUS = 65;
 var PIN_MAIN_HEIGHT_INACTIVE = 65;
 var PIN_MAIN_HEIGHT_ACTIVE = 87;
+var ENTER_KEYCODE = 13;
+
+/*
+  Реализация заполнение поля адреса
+*/
 
 var tagCoords = function (tag, tagStatus) {
   var box = tag.getBoundingClientRect();
@@ -166,59 +156,65 @@ var recordCoordsInInput = function (tag, tagStatus, input) {
 
 recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_INACTIVE, 'address');
 
-mapPinMain.addEventListener('mousedown', function () {
+/*
+  Реализация активации страници при нажатие на метку с клавиатуры и мышкой
+*/
+
+var deleteAttributes = function (block, selector, atribute) {
+  var elementsOfBlock = block.querySelectorAll(selector);
+
+  for (var i = 0; i < elementsOfBlock.length; i++) {
+    elementsOfBlock[i].removeAttribute(atribute);
+  }
+};
+
+var pageActivation = function () {
   removeClass('.map', 'map--faded');
   removeClass('.ad-form', 'ad-form--disabled');
   deleteAttributes(adForm, 'fieldset', 'disabled');
   deleteAttributes(mapFilters, 'select', 'disabled');
   deleteAttributes(mapFilters, 'fieldset', 'disabled');
   recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_ACTIVE, 'address');
+};
+
+mapPinMain.addEventListener('mousedown', function () {
+  pageActivation();
 });
 
 mapPinMain.addEventListener('keydown', function (evt) {
-  if (evt.keyCode === 13) {
-    removeClass('.map', 'map--faded');
-    removeClass('.ad-form', 'ad-form--disabled');
-    deleteAttributes(adForm, 'fieldset', 'disabled');
-    deleteAttributes(mapFilters, 'select', 'disabled');
-    deleteAttributes(mapFilters, 'fieldset', 'disabled');
-    recordCoordsInInput(mapPinMain, PIN_MAIN_HEIGHT_ACTIVE, 'address');
+  if (evt.keyCode === ENTER_KEYCODE) {
+    pageActivation();
   }
 });
 
-
-
+/*
+  Программируем сценарий установки соответствия количества гостей с количеством комнат.
+*/
 
 var roomNumbers = document.querySelector('#room_number');
-var capacity = document.querySelector('#capacity');
+var capacities = document.querySelector('#capacity');
 
 capacity.addEventListener('focus', function () {
-  var roomNumber = roomNumbers.value;
-  capacity.options[0].removeAttribute('disabled', 'disabled');
-  capacity.options[1].removeAttribute('disabled', 'disabled');
-  capacity.options[2].removeAttribute('disabled', 'disabled');
-  capacity.options[3].removeAttribute('disabled', 'disabled');
+  for (var i = 0; i < capacity.options.length; i++) {
+    capacity.options[i].removeAttribute('disabled', 'disabled');
+  }
 
+  var roomNumber = roomNumbers.value;
   if (roomNumber == 1) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[1].setAttribute('disabled', 'disabled');
     capacity.options[3].setAttribute('disabled', 'disabled');
-
-  };
+  }
   if (roomNumber == 2) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[3].setAttribute('disabled', 'disabled');
-  };
+  }
   if (roomNumber == 3) {
     capacity.options[3].setAttribute('disabled', 'disabled');
-  };
+  }
   if (roomNumber == 100) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[1].setAttribute('disabled', 'disabled');
     capacity.options[2].setAttribute('disabled', 'disabled');
-  };
+  }
 });
-
-
-
-
