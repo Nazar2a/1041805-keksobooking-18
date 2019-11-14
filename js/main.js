@@ -99,8 +99,6 @@ var removeClass = function (selector, classSelector) {
   document.querySelector(selector).classList.remove(classSelector);
 };
 
-removeClass('.map', 'map--faded');
-
 var similarAddTemplate = document.querySelector('#pin')
   .content
   .querySelector('.map__pin');
@@ -144,8 +142,8 @@ var tagCoords = function (tag, tagStatus) {
   var box = tag.getBoundingClientRect();
 
   return {
-    top: (box.top + pageYOffset) + tagStatus,
-    left: (box.left + pageXOffset) + (Math.floor(PIN_MAIN_RADIUS / 2))
+    top: (box.top + window.pageYOffset) + tagStatus,
+    left: (box.left + window.pageXOffset) + (Math.floor(PIN_MAIN_RADIUS / 2))
   };
 };
 
@@ -199,20 +197,20 @@ capacity.addEventListener('focus', function () {
     capacity.options[i].removeAttribute('disabled', 'disabled');
   }
 
-  var roomNumber = roomNumbers.value;
-  if (roomNumber == 1) {
+  var roomNumber = Number(roomNumbers.value);
+  if (roomNumber === 1) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[1].setAttribute('disabled', 'disabled');
     capacity.options[3].setAttribute('disabled', 'disabled');
   }
-  if (roomNumber == 2) {
+  if (roomNumber === 2) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[3].setAttribute('disabled', 'disabled');
   }
-  if (roomNumber == 3) {
+  if (roomNumber === 3) {
     capacity.options[3].setAttribute('disabled', 'disabled');
   }
-  if (roomNumber == 100) {
+  if (roomNumber === 100) {
     capacity.options[0].setAttribute('disabled', 'disabled');
     capacity.options[1].setAttribute('disabled', 'disabled');
     capacity.options[2].setAttribute('disabled', 'disabled');
