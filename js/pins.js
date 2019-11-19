@@ -121,7 +121,7 @@
 
   drawingElements(ads);
 
-// модуль перемещает pin--main по карте
+  // модуль перемещает pin--main по карте
 
   window.mapPinMain = document.querySelector('.map__pin--main');
 
@@ -189,4 +189,4 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
-}) ();
+})();

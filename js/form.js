@@ -3,7 +3,7 @@
 // Модуль, который работает с формой объявления
 (function () {
 
-// Реализация заполнение поля адреса при клике по пину
+  // Реализация заполнение поля адреса при клике по пину
   var tagCoords = function (tag, tagStatus) {
     var box = tag.getBoundingClientRect();
 
@@ -24,7 +24,7 @@
     recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_ACTIVE, 'address');
   });
 
-// Программируем сценарий установки соответствия количества гостей с количеством комнат.
+  // Программируем сценарий установки соответствия количества гостей с количеством комнат.
 
   var roomNumbers = document.querySelector('#room_number');
   var capacity = document.querySelector('#capacity');
@@ -53,5 +53,4 @@
       capacity.options[2].setAttribute('disabled', 'disabled');
     }
   });
-
-}) ();
+})();
