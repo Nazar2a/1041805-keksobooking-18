@@ -4,15 +4,18 @@
 (function () {
 
   // Реализация заполнение поля адреса при клике по пину
+
+  // функция вычесляет координаты элемента
   var tagCoords = function (tag, tagStatus) {
     var box = tag.getBoundingClientRect();
 
     return {
-      top: (box.top + window.pageYOffset) + tagStatus,
-      left: (box.left + window.pageXOffset) + (Math.floor(window.pins.PIN_MAIN_RADIUS / 2))
+      top: Math.floor(box.top + window.pageYOffset) + tagStatus,
+    left: (box.left + window.pageXOffset) + Math.floor(window.pins.PIN_MAIN_RADIUS / 2)
     };
   };
 
+// функция присваевает значениее вычесленых координат инпуту через значение value
   var recordCoordsInInput = function (tag, tagStatus, input) {
     var mapPinMainCoords = tagCoords(tag, tagStatus);
     document.getElementById(input).value = mapPinMainCoords.top + ', ' + mapPinMainCoords.left;

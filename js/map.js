@@ -6,6 +6,7 @@
   var mapFilters = document.querySelector('.map__filters');
   var ENTER_KEYCODE = 13;
 
+// функция выбирает все селектры из указаного блока, (данные хранятся в виде массива), и удаляет у них атребут
   var deleteAttributes = function (block, selector, atribute) {
     var elementsOfBlock = block.querySelectorAll(selector);
 
@@ -14,6 +15,7 @@
     }
   };
 
+// функция удаляет клас у селектора
   var removeClass = function (selector, classSelector) {
     document.querySelector(selector).classList.remove(classSelector);
   };

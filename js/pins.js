@@ -3,105 +3,17 @@
 (function () {
   // Модуль создает метки на карте
 
-  var TITLES = [
-    'Квартира 1',
-    'Квартира 2',
-    'Квартира 3',
-    'Квартира 4',
-    'Квартира 5',
-    'Квартира 6',
-    'Квартира 7',
-    'Квартира 8'
-  ];
-  var ADSRESS = '600, 350';
-  var TYPES = [
-    'palace',
-    'flat',
-    'house',
-    'bungalo'
-  ];
-  var CHECKINS = ['12:00', '13:00', '14:00'];
-  var CHECKOUTS = CHECKINS;
-  var FEATURES = [
-    'wifi',
-    'dishwasher',
-    'parking',
-    'washer',
-    'elevator',
-    'conditioner'
-  ];
-  var DESCRIPTION = ['описание дома', 'описание второго дома'];
-  var PHOTOS = [
-    'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-  ];
-  var ADS_QUANTILY = 8;
+  var ADS_QUANTILY = 5;
   var MARKWIDTH = 50;
   var MARKHEIGHT = 70;
 
-  var randomNumber = function (min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  var randomArrayElement = function (items) {
-    return items[Math.floor(Math.random() * items.length)];
-  };
-
-  var similarListElement = document.querySelector('.map__pins');
-
-  var creatingRandomLengthArray = function (arr) {
-    var array = [];
-    for (var i = arr.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var temp = arr[i];
-      arr[i] = arr[j];
-      arr[j] = temp;
-    }
-    for (var g = 0; g <= Math.floor(Math.random() * arr.length); g++) {
-      array.push(arr[g]);
-    }
-    return array;
-  };
-
-  var creationArrays = function (amountElements) {
-    var object = [];
-    for (var i = 0; i < amountElements; i++) {
-      object.push({
-        author: {
-          avatar: 'img/avatars/user0' + (i + 1) + '.png'
-        },
-
-        offer: {
-          title: randomArrayElement(TITLES),
-          address: ADSRESS,
-          price: randomNumber(400, 2000),
-          type: randomArrayElement(TYPES),
-          rooms: randomNumber(1, 4),
-          guests: randomNumber(1, 10),
-          checkin: randomArrayElement(CHECKINS),
-          checkout: randomArrayElement(CHECKOUTS),
-          features: creatingRandomLengthArray(FEATURES),
-          description: randomArrayElement(DESCRIPTION),
-          photos: creatingRandomLengthArray(PHOTOS)
-        },
-
-        location: {
-          x: randomNumber(similarListElement.offsetLeft, similarListElement.offsetWidth),
-          y: randomNumber(130, 630)
-        }
-      });
-    }
-
-    return object;
-  };
-
-  var ads = creationArrays(ADS_QUANTILY);
+  window.similarListElement = document.querySelector('.map__pins');
 
   var similarAddTemplate = document.querySelector('#pin')
     .content
     .querySelector('.map__pin');
 
+// функция создает клон метки из шаблона template. Задает стиль новой метки (даные берутся из массива)
   var renderMark = function (parameterMark) {
     var markElement = similarAddTemplate.cloneNode(true);
     markElement.style = 'left: ' + (parameterMark.location.x + (MARKWIDTH / 2)) + 'px; top: ' + (parameterMark.location.y + MARKHEIGHT) + 'px;';
@@ -111,82 +23,102 @@
     return markElement;
   };
 
+// функция добавляет созданые выше метки в DOM дерево
   var drawingElements = function (data) {
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < data.length; i++) {
       fragment.appendChild(renderMark(data[i]));
     }
-    similarListElement.appendChild(fragment);
+    window.similarListElement.appendChild(fragment); // вставка "fragment"  в часть кода "window.similarListElement"
   };
 
-  drawingElements(ads);
-
-  // модуль перемещает pin--main по карте
-
-  window.mapPinMain = document.querySelector('.map__pin--main');
-
-  window.pins = {
-    PIN_MAIN_RADIUS: 65,
-    PIN_MAIN_HEIGHT_ACTIVE: 87,
-    PIN_MAIN_HEIGHT_INACTIVE: 65
+  // функция удаляет все метки на карте, кроме первого
+  var deletePin = function () {
+    var mapPin = document.querySelectorAll('.map__pins .map__pin');  // выбор всех меток
+    for (var i = 1; i < mapPin.length; i++) {
+      mapPin[i].remove();         // удаление всех меток, кроме первой
+    }
   };
 
-  var COORDINATES_LIMITS = {
-    minX: 0,
-    maxX: similarListElement.offsetWidth - window.pins.PIN_MAIN_RADIUS,
-    minY: 130 - window.pins.PIN_MAIN_HEIGHT_ACTIVE,
-    maxY: 630 - window.pins.PIN_MAIN_HEIGHT_ACTIVE
-  };
+  // выполнение функции рендеринга меток через 10с
+  var adsFromServerCopy = [];
+  setTimeout(
+    () => {
+    drawingElements(window.adsFromServer); //  рендеринга меток
+    adsFromServerCopy = window.adsFromServer.slice(); // клонирование данных с сервера
+    changePrice(adsFromServerCopy);
+    },
+    1000
+  );
 
-  window.mapPinMain.addEventListener('mousedown', function (evt) {
-    evt.preventDefault();
+// модуль сортировки меток
+  var housingType = document.querySelector('#housing-type');
+  var housingPrice = document.querySelector('#housing-price');
+  var housingRooms = document.querySelector('#housing-rooms');
+  var housingGuests = document.querySelector('#housing-guests');
+  var housingFeatures = document.querySelectorAll('#housing-features > input');
+  var fieldsetHousingFeatures = document.querySelector('#housing-features');
+  var mapFeatures = document.querySelector('#map__features');
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
+  // функция измняющая цену в данных на middle, low или high. Для того чтобы при фильтрации можно было сравнить со значением housingPrice.value
+  var changePrice = function (ads) {
+    for (var i = 0; i < ads.length; i++) {
+      if (ads[i].offer.price < 10000) {
+        ads[i].offer.price = 'middle';
+      } else if (ads[i].offer.price <= 50000) {
+        ads[i].offer.price = 'low';
+      } else if (ads[i].offer.price > 50000) {
+        ads[i].offer.price = 'high';
       };
+    }
+  };
 
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
+  // функция сортировки
+  var sortingDate = function () {
+    adsFromServerCopy = adsFromServerCopy.
+      filter(function (adFromServer) {
+        return adFromServer.offer.type === housingType.value || housingType.value == "any";
+    }).
+      filter(function (adFromServer) {
+        return adFromServer.offer.rooms == housingRooms.value || housingRooms.value == "any";
+    }).
+      filter(function (adFromServer) {
+        return adFromServer.offer.guests == housingGuests.value || housingGuests.value == "any";
+    }).
+      filter(function (adFromServer) {
+        return adFromServer.offer.price === housingPrice.value || housingPrice.value == "any";
+    });
+     // сортировки по функциям
+    for (var i = 0; i < housingFeatures.length; i++) {       // идем по всему объекту
+      if (housingFeatures[i].checked === true) {             // проверяем, есть ли среди них объекты с нажатой кнопкой
+        adsFromServerCopy = adsFromServerCopy.  // сортируем основной массив с условием
+          filter(function (adFromServer) {
+            return adFromServer.offer.features.includes(housingFeatures[i].value);
+        });
       };
+    }
+  };
 
-      window.mapPinMain.style.top = (window.mapPinMain.offsetTop - shift.y) + 'px';
-      window.mapPinMain.style.left = (window.mapPinMain.offsetLeft - shift.x) + 'px';
+  var sorting = function () {
+    adsFromServerCopy = window.adsFromServer.slice(); // клонирование данных с сервера
+    deletePin(); // удаление всех меток кроме первой
+    sortingDate(); // сортировка
+    drawingElements(adsFromServerCopy); // отрисовка новый меток
+  };
 
-      if ((window.mapPinMain.offsetTop - shift.y) > COORDINATES_LIMITS.maxY) {
-        window.mapPinMain.style.top = COORDINATES_LIMITS.maxY + 'px';
-      }
-
-      if ((window.mapPinMain.offsetTop - shift.y) < COORDINATES_LIMITS.minY) {
-        window.mapPinMain.style.top = COORDINATES_LIMITS.minY + 'px';
-      }
-
-      if ((window.mapPinMain.offsetLeft - shift.x) > COORDINATES_LIMITS.maxX) {
-        window.mapPinMain.style.left = COORDINATES_LIMITS.maxX + 'px';
-      }
-
-      if ((window.mapPinMain.offsetLeft - shift.x) < COORDINATES_LIMITS.minX) {
-        window.mapPinMain.style.left = COORDINATES_LIMITS.minX + 'px';
-      }
-    };
-
-    var onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+  housingType.addEventListener('change', function () {
+    sorting();
+  });
+  housingPrice.addEventListener('change', function () {
+    sorting();
+  });
+  housingRooms.addEventListener('change', function () {
+    sorting();
+  });
+  housingGuests.addEventListener('change', function () {
+    sorting();
+  });
+  fieldsetHousingFeatures.addEventListener('change', function () {
+    sorting();
   });
 })();
