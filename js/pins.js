@@ -32,6 +32,66 @@
     window.similarListElement.appendChild(fragment); // вставка "fragment"  в часть кода "window.similarListElement"
   };
 
+//// добавление карточки объявления
+  var cardTemplate = document.querySelector('#card')
+    .content
+    .querySelector('.map__card');
+
+  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+
+  var mapFiltersContainer = document.querySelector('.map__filters-container');
+
+  // функция отрисовует карту объявления
+  var renderCard = function (parameter) {
+    var cardkElement = cardTemplate.cloneNode(true);
+    // внести изменения данных
+    cardkElement.querySelector('.popup__title').textContent = parameter.offer.title;
+    cardkElement.querySelector('.popup__text--price').textContent = parameter.offer.price + '₽/ночь';
+    if (parameter.offer.type === 'bungalo') {
+      cardkElement.querySelector('.popup__type').textContent = 'Бунгало';
+    } else if (parameter.offer.type === 'flat') {
+      cardkElement.querySelector('.popup__type').textContent = 'Квартира';
+    } else if (parameter.offer.type === 'house') {
+      cardkElement.querySelector('.popup__type').textContent = 'Дом';
+    } else if (parameter.offer.type === 'palace') {
+      cardkElement.querySelector('.popup__type').textContent = 'Дворец';
+    };
+    cardkElement.querySelector('.popup__text--capacity').textContent = parameter.offer.rooms + ' комнаты для ' + parameter.offer.guests + ' гостей';
+    cardkElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + parameter.offer.checkin + ', выезд до ' + parameter.offer.checkout;
+    cardkElement.querySelector('.popup__description').textContent = parameter.offer.description;
+
+    // вывод удобств. есл удобства нету у карточки - он удаляется с шаблона
+    for (var i = 0; i < FEATURES.length; i++) {
+      if (parameter.offer.features.includes(FEATURES[i])) {
+      } else {
+        cardkElement.querySelector('.popup__feature--' + FEATURES[i]).remove();
+      };
+    }
+
+    // на основе шаблона добавляем данные (фото) а потом удоляем шаблон, он стоит первым
+    for (var i = 0; i < parameter.offer.photos.length; i++) {
+      var photoElement = cardkElement.querySelector('.popup__photos img').cloneNode(true);
+      photoElement.src = parameter.offer.photos[i];
+      cardkElement.querySelector('.popup__photos img').after(photoElement);
+    }
+    cardkElement.querySelector('.popup__photos img').remove();
+
+    cardkElement.querySelector('.popup__avatar').src = parameter.author.avatar;
+    return cardkElement;
+  };
+
+  //  функция рендеринга необходимого количества карточек и добавления их на страницу
+  var drawingElementCard = function (data) {
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < 1; i++) {      // for (var i = 0; i < data.length; i++) {
+      fragment.appendChild(renderCard(data[i]));
+    }
+    mapFiltersContainer.before(fragment); // вставка "fragment"  в часть кода
+  };
+
+  setTimeout(() => drawingElementCard(window.adsFromServer), 1000);
+////..
+
   // функция удаляет все метки на карте, кроме первого
   var deletePin = function () {
     var mapPin = document.querySelectorAll('.map__pins .map__pin');  // выбор всех меток
