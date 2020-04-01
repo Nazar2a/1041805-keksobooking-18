@@ -30,7 +30,7 @@
 })();
 
 
-// Модуль выводит сообщение об ошибке загрузки данных
+// Модуль выводит сообщение (попапа) об ошибке загрузки данных
 (function () {
   var mainElement = document.querySelector('main');
 
@@ -38,18 +38,34 @@
     .content
     .querySelector('.error');
 
+  // функция открития попапа
   var onError = function (message) {
     console.error(message);
 
     //  вставляем div class="error" (errorTemplate) в тело mainElement
     mainElement.appendChild(errorTemplate);
 
-
     var errorButton = document.querySelector('.error__button');
 
-    // после клика на кнопку "Попробовать снова" - удаляем созданный нами div
-    errorButton.addEventListener('click', function () {
+    // функция - обработчик. Закрывает попап после нажатия на кнопку ESC
+    var onPopupEscPress = function(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        closePopup();
+      }
+    };
+
+    //  добавляем событие onPopupEscPress
+    document.addEventListener('keydown', onPopupEscPress);
+
+    // функция закрытия попапа
+    var closePopup = function() {
       errorTemplate.remove();
+      document.removeEventListener('keydown', onPopupEscPress);
+    };
+
+    // после клика на кнопку "Попробовать снова" - удаляем созданный нами div и обработчик события onPopupEscPress
+    errorButton.addEventListener('click', function () {
+      closePopup();
     });
   };
 

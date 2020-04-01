@@ -97,29 +97,18 @@
     }
   };
 
-  var sorting = function () {
-
+  var onSortingPinChange = function () {
     window.adsFromServerCopy = window.adsFromServer.slice(); // клонирование данных с сервера
     deletePin(); // удаление всех меток кроме первой
     sortingDate(); // сортировка
     drawingElements(adsFromServerCopy); // отрисовка новый меток
   };
 
-  housingType.addEventListener('change', function () {
-    sorting();
-  });
-  housingPrice.addEventListener('change', function () {
-    sorting();
-  });
-  housingRooms.addEventListener('change', function () {
-    sorting();
-  });
-  housingGuests.addEventListener('change', function () {
-    sorting();
-  });
-  fieldsetHousingFeatures.addEventListener('change', function () {
-    sorting();
-  });
+  housingType.addEventListener('change', onSortingPinChange);
+  housingPrice.addEventListener('change', onSortingPinChange);
+  housingRooms.addEventListener('change', onSortingPinChange);
+  housingGuests.addEventListener('change', onSortingPinChange);
+  fieldsetHousingFeatures.addEventListener('change', onSortingPinChange);
 
   //// добавление карточки объявления
   var cardTemplate = document.querySelector('#card')
@@ -182,12 +171,12 @@
       var cardButton = document.querySelector('.popup__close');
 
       cardButton.addEventListener('click', function () {
-      document.querySelector('.map__card').remove();
+        document.querySelector('.map__card').remove();
       });
   }, 1000);
 
 //// отрисовка меток по их клику
-  var drawingCardByClick = function (evt) {
+  var ondrawingCardClick = function (evt) {
     // условие ослеживание. Узнаем по какому элементу мы нажали, через класс дочерного элемента. Если по картинке или кнопке - true
     if (evt.path[0].className === 'map__pin' || evt.path[1].className === 'map__pin') {
 
@@ -219,13 +208,11 @@
     };
   };
 
-  window.similarListElement.addEventListener("click", function (evt) {
-    drawingCardByClick(evt);
-  });
+  window.similarListElement.addEventListener("click", ondrawingCardClick);
 
   window.similarListElement.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.ENTER_KEYCODE) {
-      drawingCardByClick(evt);
+      ondrawingCardClick(evt);
     }
   });
 

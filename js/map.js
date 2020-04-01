@@ -5,6 +5,7 @@
   var adForm = document.querySelector('.ad-form');
   var mapFilters = document.querySelector('.map__filters');
   window.ENTER_KEYCODE = 32;
+  window.ESC_KEYCODE = 27;
 
 // функция выбирает все селектры из указаного блока, (данные хранятся в виде массива), и удаляет у них атребут
   var deleteAttributes = function (block, selector, atribute) {
@@ -31,7 +32,6 @@
   window.mapPinMain.addEventListener('mouseup', function () {
     pageActivation();
   });
-
 
   window.mapPinMain.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.ENTER_KEYCODE) {
