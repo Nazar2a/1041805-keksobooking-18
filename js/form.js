@@ -16,15 +16,15 @@
   };
 
   // функция присваевает значениее вычесленых координат инпуту через значение value
-  var recordCoordsInInput = function (tag, tagStatus, input) {
+  window.recordCoordsInInput = function (tag, tagStatus, input) {
     var mapPinMainCoords = tagCoords(tag, tagStatus);
     document.getElementById(input).value = mapPinMainCoords.top + ', ' + mapPinMainCoords.left;
   };
 
-  recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_INACTIVE, 'address');
+  window.recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_INACTIVE, 'address');
 
   window.mapPinMain.addEventListener('mousemove', function () {
-    recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_ACTIVE, 'address');
+    window.recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_ACTIVE, 'address');
   });
 
   // Программируем сценарий установки соответствия количества гостей с количеством комнат.

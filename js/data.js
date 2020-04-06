@@ -4,6 +4,7 @@
 //  модуль отправки и загрузки данных с сервера
   var DATA_SERVER = 'https://js.dump.academy/keksobooking/data';
   var FORM_SERVER = 'https://js.dump.academy/keksobooking';
+  var ESC_KEYCODE = 27;
 
   var mainElement = document.querySelector('main');
 
@@ -11,7 +12,30 @@
     .content
     .querySelector('.error');
 
-  var form = document.querySelector('.ad-form');
+  var errorSuccess = document.querySelector('#success')
+    .content
+    .querySelector('.success');
+
+  var adForm = document.querySelector('.ad-form');
+
+  // функция создает попап с возможостю закрытия его по клику на произвольную обдасть и ESC
+  var creatingPopup = function (template) {
+    mainElement.appendChild(template);
+
+    // функция - обработчик. Закрывает попап после нажатия на кнопку ESC
+    var onPopupEscPress = function(evt) {
+      if (evt.keyCode === ESC_KEYCODE) {
+        template.remove();
+      }
+    };
+
+    document.addEventListener('keydown', onPopupEscPress, {once: true});
+
+    // после клика на область div - удаляем созданный нами div
+    template.addEventListener('click', function () {
+      template.remove();
+    });
+  };
 
   // функция - действие при успешной загрузки данных
   var onSuccessload = function (data) {
@@ -20,39 +44,21 @@
   };
 
   // функция - действие при успешной отправки данных
-  var onSuccessUpload = function (data) {
-    console.log(data);
+  var onSuccessUpload = function () {
+    creatingPopup(errorSuccess);
+    adForm.reset();              // сбрасываем форму adForm
+    window.mapFilters.reset();   // сбрасываем форму mapFilters
+    window.deletePin();          // удаляем все метки
+    document.querySelector('.map__card').remove();   // удаляем карточку объявления
+    window.mapPinMain.style.top = 375 + 'px';   // главная метка возвращается в исходное положение
+    window.mapPinMain.style.left = 570 + 'px';
+    window.recordCoordsInInput(window.mapPinMain, window.pins.PIN_MAIN_HEIGHT_ACTIVE, 'address');  //  значение поля адреса корректируется соответственно положению метки;
   };
 
-  // функция - действие при успешной ошибке с откритием попапа
+  // функция - действие при ошибке с откритием попапа
   var onError = function (message) {
     console.error(message);
-
-    //  вставляем div class="error" (errorTemplate) в тело mainElement
-    mainElement.appendChild(errorTemplate);
-
-    var errorButton = document.querySelector('.error__button');
-
-    // функция - обработчик. Закрывает попап после нажатия на кнопку ESC
-    var onPopupEscPress = function(evt) {
-      if (evt.keyCode === ESC_KEYCODE) {
-        closePopup();
-      }
-    };
-
-    //  добавляем событие onPopupEscPress
-    document.addEventListener('keydown', onPopupEscPress);
-
-    // функция закрытия попапа
-    var closePopup = function() {
-      errorTemplate.remove();
-      document.removeEventListener('keydown', onPopupEscPress);
-    };
-
-    // после клика на кнопку "Попробовать снова" и по клику на произвольную область экрана  - удаляем созданный нами div и обработчик события onPopupEscPress
-    document.addEventListener('click', function () {
-      closePopup();
-    });
+    creatingPopup(errorTemplate);
   };
 
   // функция загрузки данных с сервера
@@ -67,9 +73,8 @@
 
   load(onSuccessload, onError);
 
-  form.addEventListener('submit', function (evt) {
-    upload(new FormData(form), onSuccessUpload, onError);
+  adForm.addEventListener('submit', function (evt) {
+    upload(new FormData(adForm), onSuccessUpload, onError);
     evt.preventDefault();
   });
-
 })();

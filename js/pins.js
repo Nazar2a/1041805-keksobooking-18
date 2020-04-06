@@ -32,7 +32,7 @@
   };
 
   // функция удаляет все метки на карте, кроме первого
-  var deletePin = function () {
+  window.deletePin = function () {
     var mapPin = document.querySelectorAll('.map__pins .map__pin');  // выбор всех меток
     for (var i = 1; i < mapPin.length; i++) {
       mapPin[i].remove();         // удаление всех меток, кроме первой
