@@ -1,9 +1,7 @@
 'use strict';
 
 (function () {
-
-  // модуль перемещает pin--main по карте
-
+  //// модуль перемещает pin--main по карте
   window.mapPinMain = document.querySelector('.map__pin--main');
 
   window.pins = {
@@ -46,15 +44,12 @@
       if ((window.mapPinMain.offsetTop - shift.y) > COORDINATES_LIMITS.maxY) {
         window.mapPinMain.style.top = COORDINATES_LIMITS.maxY + 'px';
       }
-
       if ((window.mapPinMain.offsetTop - shift.y) < COORDINATES_LIMITS.minY) {
         window.mapPinMain.style.top = COORDINATES_LIMITS.minY + 'px';
       }
-
       if ((window.mapPinMain.offsetLeft - shift.x) > COORDINATES_LIMITS.maxX) {
         window.mapPinMain.style.left = COORDINATES_LIMITS.maxX + 'px';
       }
-
       if ((window.mapPinMain.offsetLeft - shift.x) < COORDINATES_LIMITS.minX) {
         window.mapPinMain.style.left = COORDINATES_LIMITS.minX + 'px';
       }

@@ -1,23 +1,21 @@
 'use strict';
 
-// Модуль, который работает с формой объявления
 (function () {
+  //// Модуль, который работает с формой объявления
 
-  // Реализация заполнение поля адреса при клике по пину
-
-  // функция вычесляет координаты элемента
-  var tagCoords = function (tag, tagStatus) {
+  // Реализация заполнение поля адреса при клике по пину 1.функция вычесляет координаты элемента
+  var getTagCoords = function (tag, tagStatus) {
     var box = tag.getBoundingClientRect();
 
     return {
       top: Math.floor(box.top + window.pageYOffset) + tagStatus,
-    left: (box.left + window.pageXOffset) + Math.floor(window.pins.PIN_MAIN_RADIUS / 2)
+      left: Math.floor(box.left + window.pageXOffset) + Math.floor(window.pins.PIN_MAIN_RADIUS / 2)
     };
   };
 
-  // функция присваевает значениее вычесленых координат инпуту через значение value
+  // 2.функция присваевает значениее вычесленых координат инпуту через значение value
   window.recordCoordsInInput = function (tag, tagStatus, input) {
-    var mapPinMainCoords = tagCoords(tag, tagStatus);
+    var mapPinMainCoords = getTagCoords(tag, tagStatus);
     document.getElementById(input).value = mapPinMainCoords.top + ', ' + mapPinMainCoords.left;
   };
 
@@ -75,12 +73,12 @@
     }
   });
 
-  // Поле синхронизации поля  «Время заезда» и «Время выезда»
+  // реализация синхронизации поля  «Время заезда» и «Время выезда»
   var timein = document.querySelector('#timein');
   var timeout = document.querySelector('#timeout');
 
   // в зависимости от значения поля selectfocus - функция изменяняет значение в поле selectchanging
-  var timeSynchronization = function (selectfocus, selectchanging) {
+  var synchronizationTime = function (selectfocus, selectchanging) {
     if (selectfocus.value === "12:00") {
       selectchanging.options[0].selected = true;
     }
@@ -93,10 +91,10 @@
   };
 
   timein.addEventListener('change', function () {
-    timeSynchronization(timein, timeout);
+    synchronizationTime(timein, timeout);
   });
 
   timeout.addEventListener('change', function () {
-    timeSynchronization(timeout, timein);
+    synchronizationTime(timeout, timein);
   });
 })();

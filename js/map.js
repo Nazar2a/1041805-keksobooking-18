@@ -1,12 +1,12 @@
 'use strict';
 
-// переход страници в активное состояние
 (function () {
-  var adForm = document.querySelector('.ad-form');
+  //// Модуль переход страници в активное состояние
+  window.adForm = document.querySelector('.ad-form');
   window.mapFilters = document.querySelector('.map__filters');
   window.ENTER_KEYCODE = 32;
 
-// функция выбирает все селектры из указаного блока, (данные хранятся в виде массива), и удаляет у них атребут
+  // функция выбирает все селектры из указаного блока, (данные хранятся в виде массива), и удаляет у них атребут
   var deleteAttributes = function (block, selector, atribute) {
     var elementsOfBlock = block.querySelectorAll(selector);
 
@@ -15,7 +15,7 @@
     }
   };
 
-// функция удаляет клас у селектора
+  // функция удаляет клас у селектора
   var removeClass = function (selector, classSelector) {
     document.querySelector(selector).classList.remove(classSelector);
   };
@@ -28,13 +28,16 @@
     deleteAttributes(mapFilters, 'fieldset', 'disabled');
   };
 
-  window.mapPinMain.addEventListener('mouseup', function () {
-    pageActivation();
-  });
-
-  window.mapPinMain.addEventListener('keydown', function (evt) {
+  var onDrawingCardKeydown = function(evt) {
     if (evt.keyCode === window.ENTER_KEYCODE) {
       pageActivation();
-    }
-  });
+      }
+  };
+
+  var onPageActivationMouseup = function(evt) {
+    pageActivation();
+  };
+
+  window.mapPinMain.addEventListener('mouseup', onPageActivationMouseup);
+  window.mapPinMain.addEventListener('keydown', onDrawingCardKeydown);
 })();

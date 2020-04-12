@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-//  модуль отправки и загрузки данных с сервера
+  ////  модуль отправки и загрузки данных с сервера
   var DATA_SERVER = 'https://js.dump.academy/keksobooking/data';
   var FORM_SERVER = 'https://js.dump.academy/keksobooking';
   var ESC_KEYCODE = 27;
@@ -22,25 +22,26 @@
   var creatingPopup = function (template) {
     mainElement.appendChild(template);
 
-    // функция - обработчик. Закрывает попап после нажатия на кнопку ESC
-    var onPopupEscPress = function(evt) {
+    var onPopupCloseKeydown = function(evt) {
       if (evt.keyCode === ESC_KEYCODE) {
         template.remove();
       }
     };
 
-    document.addEventListener('keydown', onPopupEscPress, {once: true});
+    var onPopupCloseClick = function(evt) {
+      template.remove();
+    };
+
+    // после нажатия на кнопку ESC  - удаляем созданный нами div
+    document.addEventListener('keydown', onPopupCloseKeydown, {once: true});
 
     // после клика на область div - удаляем созданный нами div
-    template.addEventListener('click', function () {
-      template.remove();
-    });
+    template.addEventListener('click', onPopupCloseClick);
   };
 
   // функция - действие при успешной загрузки данных
   var onSuccessload = function (data) {
     window.adsFromServer = data;
-    console.log(window.adsFromServer);
   };
 
   // функция - действие при успешной отправки данных

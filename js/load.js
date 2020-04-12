@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-// модуль загрузки данных с сервера и вывод статуса загрузки
+  //// модуль загрузки данных с сервера и вывод статуса загрузки
   window.sendXhrRequest = function (method, url, onSuccess, onError, data) {
     var xhr = new XMLHttpRequest();
 
